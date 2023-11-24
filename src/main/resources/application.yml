@@ -1,0 +1,20 @@
+server:
+  port : 8082
+
+
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/question_db
+    username: root
+    password: mypass
+    hikari:
+      auto-commit: false
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 10000
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+    show-sql: true

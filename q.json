@@ -1,0 +1,38 @@
+{
+  "questionId": 1,
+  "type": "java 17",
+  "question": "Which of the following methods compile? (Choose all that apply.)",
+  "options": [
+    {
+      "optionId": "A",
+      "description": "public void january() { return; }",
+      "sequence": 1
+    },
+    {
+      "optionId": "B",
+      "description": "public int february() { return null;}",
+      "sequence": 2
+    },
+    {
+      "optionId": "C",
+      "description": "public void march() {}",
+      "sequence": 3
+    },
+    {
+      "optionId": "D",
+      "description": "public int april() { return 9;}",
+      "sequence": 4
+    },
+    {
+      "optionId": "E",
+      "description": "public int may() { return 9.0;}",
+      "sequence": 5
+    },
+    {
+      "optionId": "F",
+      "description": "public int june() { return;}",
+      "sequence": 6
+    }
+  ],
+  "answers" : ["A","B"]
+}
