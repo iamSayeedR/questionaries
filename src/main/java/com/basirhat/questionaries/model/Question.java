@@ -1,6 +1,9 @@
 package com.basirhat.questionaries.model;
 
+import lombok.Builder;
+
 import java.util.List;
 
-public record   Question(int questionId, String type, String question, List<QuestionOption> options, List<String> answers) {
+@Builder
+public record Question(int questionId, String type, String question, List<QuestionOption> options, List<String> answers) {
 }
