@@ -1,6 +1,8 @@
 package com.basirhat.questionaries.service;
 
 import com.basirhat.questionaries.entity.QuestionEntity;
+import com.basirhat.questionaries.entity.QuestionOptionEntity;
+import com.basirhat.questionaries.mapper.QuestionOptionMapper;
 import com.basirhat.questionaries.model.Question;
 import com.basirhat.questionaries.mapper.QuestionMapper;
 import com.basirhat.questionaries.repository.QuestionRepository;
@@ -18,16 +20,21 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private QuestionOptionMapper questionOptionMapper;
+
     public void saveQuestions(List<Question> questions) {
-        List<QuestionEntity> questionEntities = questionMapper.domainToEntities(questions);
+
+        List<QuestionEntity> questionEntities = questions.stream()
+                .map(question -> {
+                    final QuestionEntity questionEntity = questionMapper.domainToEntity(question);
+                    final List<QuestionOptionEntity> questionOptionEntityList = questionOptionMapper.domainsToEntities(question.options(), questionEntity);
+                    questionEntity.setQuestionOptionsList(questionOptionEntityList);
+                    return questionEntity;
+                }).toList();
+
         questionRepository.saveAll(questionEntities);
     }
-
-
-//    public Question findById(int id) {
-//        QuestionEntity questionEntity = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Question not found with ID: " + id));
-//        return new Question(questionEntity.getQuestionId(), questionEntity.getType(), questionEntity.getQuestion(), questionEntity.getQuestionOptionsList(), questionEntity.getAnswers());
-//    }
 
 }
 

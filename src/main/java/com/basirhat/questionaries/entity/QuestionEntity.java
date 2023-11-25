@@ -20,7 +20,7 @@ public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
-    private Integer questionId;
+    private int qid;
 
     //convert into Enum
     @Column(name = "type")
@@ -32,9 +32,6 @@ public class QuestionEntity {
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "questionId", orphanRemoval = true)
     private List<QuestionOptionEntity> questionOptionsList = new ArrayList<>();
 
-//    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "question", orphanRemoval = true)
-//    List<AnswerEntity> answerList = new ArrayList<>();
-
     @Column(name = "answers")
-    private List<String> answers;
+    private String answers;
 }

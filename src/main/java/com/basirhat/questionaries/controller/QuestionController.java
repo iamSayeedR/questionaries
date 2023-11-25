@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/v1")
+@RequestMapping("/v1")
 public class QuestionController {
 
     @Autowired
@@ -22,9 +22,7 @@ public class QuestionController {
     @PostMapping("/questions")
     public ResponseEntity<Void> saveQuestion(@RequestBody List<Question> questionList) {
         questionService.saveQuestions(questionList);
-
-        return ResponseEntity.accepted()
-                .build();
+        return ResponseEntity.accepted().build();
     }
 
 }

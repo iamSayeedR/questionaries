@@ -35,24 +35,39 @@ class QuestionRepositoryTest {
     void shouldTestSaveTheQuestion() {
 
         QuestionEntity questionEntity = QuestionEntity.builder()
-                .question("Which of the following methods compile? (Choose all that apply.)")
+                .qid(1)
                 .type("Java 17")
+                .question("Which of the following methods compile? (Choose all that apply.)")
                 .questionOptionsList(List.of(QuestionOptionEntity.builder()
+                        .id(1)
                         .optionId("A")
                         .description("public void january() { return; }")
                         .sequence(1)
                         .build()))
-                .answers(List.of("A"))
+                .answers("A")
                 .build();
 
-        questionEntity = questionRepository.save(questionEntity);
+        List<QuestionOptionEntity> questionOptionsList = questionEntity.getQuestionOptionsList();
+
+        QuestionEntity finalQuestionEntity = questionEntity;
+
+        List<QuestionOptionEntity> questionOptionEntityList = questionOptionsList.stream().map(questionOptionEntity -> {
+                    questionOptionEntity.setQuestionId(finalQuestionEntity);
+                    return questionOptionEntity;
+                }
+        ).toList();
+
+        finalQuestionEntity.setQuestionOptionsList(questionOptionEntityList);
+
+        questionEntity = questionRepository.save(finalQuestionEntity);
 
         List<QuestionOptionEntity> questionOptionList = questionOptionRepository.findAll();
 
+        assertThat(questionOptionList.get(0).getQuestionId()).isNotNull();
 
-        assertThat(questionEntity.getQuestionId()).isNotZero();
+        assertThat(questionEntity.getQid()).isNotZero();
         assertThat(questionOptionList.size()).isEqualTo(1);
-        assertThat(questionEntity.getAnswers().size()).isNotZero();
+        assertThat(questionEntity.getAnswers()).isNotNull();
     }
 
 

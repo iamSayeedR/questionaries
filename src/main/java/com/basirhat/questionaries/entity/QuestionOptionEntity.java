@@ -18,7 +18,7 @@ public class QuestionOptionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private int id;
 
     @Column(name = "option_id")
     private String optionId;
@@ -32,7 +32,5 @@ public class QuestionOptionEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")
     private QuestionEntity questionId;
-
-
 
 }
