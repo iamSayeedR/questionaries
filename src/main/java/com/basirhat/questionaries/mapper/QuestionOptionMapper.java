@@ -5,7 +5,6 @@ import com.basirhat.questionaries.entity.QuestionOptionEntity;
 import com.basirhat.questionaries.model.QuestionOption;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,25 +1,32 @@
 package com.basirhat.questionaries.mapper;
 
 import com.basirhat.questionaries.entity.QuestionEntity;
-import com.basirhat.questionaries.entity.QuestionOptionEntity;
 import com.basirhat.questionaries.model.Question;
 import com.basirhat.questionaries.model.QuestionOption;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class QuestionMapperTest {
 
-    private QuestionMapper questionMapper = new QuestionMapperImpl(new QuestionOptionMapperImpl());
+    @InjectMocks
+    private QuestionMapperImpl questionMapper;
+
+    @Mock
+    private QuestionOptionMapperImpl questionOptionMapper;
+
+    @Captor
+    private ArgumentCaptor<List<QuestionOption>> argumentCaptor;
 
     @Test
     public void shouldConvertQuestionModelToEntity() {
@@ -43,13 +50,15 @@ class QuestionMapperTest {
 
         QuestionEntity actual = questionMapper.domainToEntity(question);
 
+        verify(questionOptionMapper).domainsToEntities(argumentCaptor.capture());
+
+        List<QuestionOption> argumentCaptorValue = argumentCaptor.getValue();
+        assertThat(argumentCaptorValue.size()).isEqualTo(1);
+
         assertThat(actual.getAnswers()).isEqualTo(String.join(",", stringList));
         assertThat(actual.getQuestion()).isEqualTo(q);
-        assertThat(actual.getQuestionOptionsList()).isEqualTo(List.of(QuestionOptionEntity.builder()
-                .optionId("A")
-                .description("12112")
-                .sequence(1)
-                .build()));
+
+
     }
 
 }
