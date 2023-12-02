@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         uses = {QuestionOptionMapper.class},
@@ -32,7 +34,7 @@ public interface QuestionMapper {
 
     @Named("stringToSet")
     static List<String> stringToSet(String answers) {
-        return Arrays.stream(answers.split(",")).toList();
+        return nonNull(answers) ? Arrays.stream(answers.split(",")).toList() : null;
     }
 
     @Named("setToString")

@@ -29,7 +29,7 @@ public class QuestionOptionEntity {
     @Column(name = "sequence")
     private int sequence;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")
     private QuestionEntity questionId;
 

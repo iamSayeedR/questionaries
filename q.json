@@ -30,7 +30,7 @@
     },
     {
       "optionId": "F",
-      "description": "public int june() { return;}",
+      "description": "public int june() { return;}"
       "sequence": 6
     }
   ],

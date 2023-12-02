@@ -15,3 +15,5 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
+
+no_of_questions_per_exam: 5

@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "question")
 @Table(name = "question")
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionEntity {
@@ -29,7 +29,7 @@ public class QuestionEntity {
     @Column(name = "question")
     private String question;
 
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "questionId", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
     private List<QuestionOptionEntity> questionOptionsList = new ArrayList<>();
 
     @Column(name = "answers")

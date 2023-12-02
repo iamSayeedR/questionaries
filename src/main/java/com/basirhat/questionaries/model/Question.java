@@ -7,7 +7,7 @@ import lombok.Builder;
 
 import java.util.List;
 
-@Builder
+@Builder(toBuilder = true)
 public record Question(
         int qid,
         @NotBlank(message = "Question type cannot be blank")
