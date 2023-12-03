@@ -15,10 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionServiceTest {
@@ -40,12 +43,14 @@ class QuestionServiceTest {
 
     @Test
     public void shouldTestSaveAllTheQuestions() {
-        String questionText = "Suppose you have a module named com.vet. Where could you place the following\n" +
-                "module-info.\n" +
-                "java file to create a valid module?\n" +
-                "public module com.vet {\n" +
-                "exports com.vet;\n" +
-                "}";
+        String questionText = """ 
+                Suppose you have a module named com.vet. Where could you place the following
+                "module-info
+                "java file to create a valid module?
+                "public module com.vet {
+                "exports com.vet;
+                "}
+                """;
         List<String> answers = List.of("A", "b");
         List<QuestionOption> questionOptions = List.of(QuestionOption.builder()
                 .optionId("A")
@@ -90,5 +95,49 @@ class QuestionServiceTest {
 
     }
 
+    @Test
+    void shouldTestGetRandomQuestions() {
 
+        String examType = "Java 17";
+
+        List<QuestionEntity> questionEntities = new ArrayList<>();
+
+        when(questionRepository.findByType(examType)).thenReturn(questionEntities);
+
+        List<Question> actualQuestions = questionService.getRandomQuestions(examType);
+        assertEquals(questionEntities.size(), actualQuestions.size());
+        verify(questionRepository).findByType(examType);
+
+    }
+
+    @Test
+    public void shouldTestGenerateRandomNumbers() {
+        int max = 10;
+        int expectedSize = 10;
+        Random random = new Random();
+        List<Integer> expectedList = new ArrayList<>();
+        for (int i = 0; i < expectedSize; i++) {
+            int randomNumber = random.nextInt(max);
+            expectedList.add(randomNumber);
+        }
+
+        List<Integer> actualList = generateRandomNumbers(max);
+
+        assertEquals(expectedSize, actualList.size());
+        assertTrue(actualList.containsAll(expectedList));
+    }
+
+    List<Integer> generateRandomNumbers(int max) {
+        final List<Integer> numberList = new ArrayList<>();
+        final Random random = new Random();
+        while (numberList.size() < 10) {
+            int randomNumber = random.nextInt(max);
+            if (!numberList.contains(randomNumber)) {
+                numberList.add(randomNumber);
+            }
+        }
+        return numberList;
+    }
 }
+
+

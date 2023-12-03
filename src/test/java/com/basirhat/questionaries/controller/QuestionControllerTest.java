@@ -1,6 +1,7 @@
 package com.basirhat.questionaries.controller;
 
 import com.basirhat.questionaries.model.Question;
+import com.basirhat.questionaries.model.QuestionOption;
 import com.basirhat.questionaries.service.QuestionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -15,15 +16,17 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -398,6 +401,16 @@ class QuestionControllerTest {
                 .andExpect(status().isBadRequest()).andReturn();
 
         verify(questionService, never()).saveQuestions(argumentCaptor.capture());
+    }
+
+    @Test
+    public void shouldGetAndReturn200WhenControllerIsCalled() throws Exception {
+        String examType = "Java 17";
+
+        mockMvc.perform(get("/v1/questions").param("examType", examType))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(0))
+                .andReturn();
     }
 
 }

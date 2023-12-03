@@ -34,11 +34,8 @@ public class QuestionController {
 
     @GetMapping("/questions")
     public ResponseEntity<List<Question>> startExam(@RequestParam String examType) {
-
         log.info("examType selected - {} ", examType);
-
         List<Question> questions = questionService.getRandomQuestions(examType);
-
         return ResponseEntity.ok(questions);
 
     }

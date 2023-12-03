@@ -32,6 +32,7 @@ public class QuestionService {
 
     /**
      * This method saves list of questions into database.
+     *
      * @param questions - the given list of question
      */
     @Transactional
@@ -44,7 +45,8 @@ public class QuestionService {
                     final QuestionEntity questionEntity = questionMapper.domainToEntity(question);
                     final List<QuestionOptionEntity> questionOptionEntityList = questionOptionMapper.domainsToEntities(question.options(), questionEntity);
                     questionEntity.setQuestionOptionsList(questionOptionEntityList);
-                    return questionEntity;})
+                    return questionEntity;
+                })
                 .toList();
 
         questionRepository.saveAll(questionEntities);
@@ -54,45 +56,38 @@ public class QuestionService {
 
     /**
      * This method generates random questions for the given exam type.
+     *
      * @param examType - exam type
      * @return - list of random questions
      */
     @Transactional(readOnly = true)
     public List<Question> getRandomQuestions(String examType) {
-
         final List<QuestionEntity> allQuestions = questionRepository.findByType(examType);
-
         final List<Integer> randomNumbers = generateRandomNumbers(allQuestions.size());
-
         final List<QuestionEntity> randomQuestionEntities = randomNumbers.stream()
                 .map(allQuestions::get)
                 .map(questionEntity -> questionEntity.toBuilder().answers(null).build())
                 .toList();
-
+        log.info("random questions generated");
         return questionMapper.entitiesToDomain(randomQuestionEntities);
     }
 
 
     /**
      * Generates random numbers
+     *
      * @param max - max number
      * @return - list of random integers
      */
     private List<Integer> generateRandomNumbers(int max) {
-
         final List<Integer> numberList = new ArrayList<>();
-
         final Random random = new Random();
-
         while (numberList.size() < noOfQuestionsPerExam) {
             int randomNumber = random.nextInt(max);
             if (!numberList.contains(randomNumber)) {
                 numberList.add(randomNumber);
-            }
-        }
-
+            }}
+        log.info("random numberList generated");
         return numberList;
     }
 }
-
-
