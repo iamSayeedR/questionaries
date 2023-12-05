@@ -1,8 +1,9 @@
 package com.basirhat.questionaries.mapper;
 
 import com.basirhat.questionaries.entity.QuestionEntity;
-import com.basirhat.questionaries.model.Question;
-import com.basirhat.questionaries.model.QuestionOption;
+
+import com.basirhat.questionnaires.model.Question;
+import com.basirhat.questionnaires.model.QuestionOption;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -30,11 +31,12 @@ class QuestionMapperTest {
 
     @Test
     public void shouldConvertQuestionModelToEntity() {
-        String q = "What could be the output of the following?\n" +
-                "var stream = Stream.iterate(\"\", (s) ->\n" +
-                "s + \"1\");\n" +
-                "System.out.println(stream.limit(2).map(x ->\n" +
-                "x + \"2\"));";
+        String q = """
+                What could be the output of the following?
+                var stream = Stream.iterate("", (s) ->
+                s + "1");
+                System.out.println(stream.limit(2).map(x ->
+                x + "2"));""";
 
         List<String> stringList = List.of("A", "B");
 

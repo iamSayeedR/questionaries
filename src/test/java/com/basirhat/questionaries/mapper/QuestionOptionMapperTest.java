@@ -1,7 +1,8 @@
 package com.basirhat.questionaries.mapper;
 
 import com.basirhat.questionaries.entity.QuestionOptionEntity;
-import com.basirhat.questionaries.model.QuestionOption;
+
+import com.basirhat.questionnaires.model.QuestionOption;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class QuestionOptionMapperTest {
 
 
-    private QuestionOptionMapper questionOptionMapper = Mappers.getMapper(QuestionOptionMapper.class);
+    private final QuestionOptionMapper questionOptionMapper = Mappers.getMapper(QuestionOptionMapper.class);
 
     @Test
     public void shouldTestDomainsToEntities() {

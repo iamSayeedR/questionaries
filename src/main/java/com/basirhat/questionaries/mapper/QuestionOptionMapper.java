@@ -2,7 +2,7 @@ package com.basirhat.questionaries.mapper;
 
 import com.basirhat.questionaries.entity.QuestionEntity;
 import com.basirhat.questionaries.entity.QuestionOptionEntity;
-import com.basirhat.questionaries.model.QuestionOption;
+import com.basirhat.questionnaires.model.QuestionOption;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 

@@ -18,11 +18,6 @@ class QuestionOptionRepositoryTest {
     @Autowired
     private QuestionOptionRepository questionOptionRepository;
 
-    @Autowired
-    private QuestionRepository questionRepository;
-
-
-
 
     @Test
     void shouldTestSaveTheQuestion() {

@@ -1,8 +1,10 @@
 package com.basirhat.questionaries.exceptionhandler;
 
 import com.basirhat.questionaries.model.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,4 +42,18 @@ public class GlobalExceptionHandler {
         validationProblemDetail.setProperty("errors", errors);
         return validationProblemDetail;
     }
+
+    @ExceptionHandler({ ConstraintViolationException.class,  } )
+    public ProblemDetail handleConstraintViolationException(ConstraintViolationException exception) {
+        final var validationProblemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Validation Error");
+        final var errors = exception.getConstraintViolations().stream().map(violation -> ConstraintViolation.builder()
+                        .message(violation.getMessage())
+//                        .fieldName(violation.getField())
+                        .rejectedValue(Objects.isNull(violation.getInvalidValue()) ? "null" : violation.getInvalidValue().toString())
+                        .build())
+                .toList();
+        validationProblemDetail.setProperty("errors", errors);
+        return validationProblemDetail;
+    }
+
 }

@@ -1,12 +1,13 @@
 package com.basirhat.questionaries.controller;
 
 
-import com.basirhat.questionaries.model.Question;
 import com.basirhat.questionaries.service.QuestionService;
+import com.basirhat.questionnaires.model.Question;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,14 +15,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1")
 @Slf4j
+@Validated
+@RequiredArgsConstructor
 public class QuestionController {
 
-    @Autowired
-    private QuestionService questionService;
+
+    private final QuestionService questionService;
 
     @PostMapping("/questions")
-    public ResponseEntity<Void> saveQuestion(@RequestBody List<Question> questionList) {
-//        validateQuestion(questionList);
+    public ResponseEntity<Void> saveQuestion(@RequestBody List<@Valid Question> questionList) {
         questionService.saveQuestions(questionList);
         return ResponseEntity.accepted().build();
     }

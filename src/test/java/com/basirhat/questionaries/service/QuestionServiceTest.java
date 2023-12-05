@@ -4,9 +4,10 @@ import com.basirhat.questionaries.entity.QuestionEntity;
 import com.basirhat.questionaries.entity.QuestionOptionEntity;
 import com.basirhat.questionaries.mapper.QuestionMapper;
 import com.basirhat.questionaries.mapper.QuestionOptionMapper;
-import com.basirhat.questionaries.model.Question;
-import com.basirhat.questionaries.model.QuestionOption;
+
 import com.basirhat.questionaries.repository.QuestionRepository;
+import com.basirhat.questionnaires.model.Question;
+import com.basirhat.questionnaires.model.QuestionOption;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

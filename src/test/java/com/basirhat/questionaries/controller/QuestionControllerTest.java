@@ -1,8 +1,8 @@
 package com.basirhat.questionaries.controller;
 
-import com.basirhat.questionaries.model.Question;
-import com.basirhat.questionaries.model.QuestionOption;
+
 import com.basirhat.questionaries.service.QuestionService;
+import com.basirhat.questionnaires.model.Question;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -174,8 +174,8 @@ class QuestionControllerTest {
     @Test
     void shouldReturn400WhenQuestionIsNull() throws Exception {
         String question = """
-                                
-                {
+                               
+              {
                   "type": "java 17",
                   "options": [
                     {
@@ -413,4 +413,181 @@ class QuestionControllerTest {
                 .andReturn();
     }
 
-}
+    @Test
+    public void shouldGetAndReturn202WhenListOfQuestionsAreSaved() throws Exception {
+
+        String questions = """
+                [
+                {
+                "type": "java 17",
+                  "question": "Which of the following methods compile? (Choose all that apply.)",
+                  "options": [
+                    {
+                      "optionId": "A",
+                      "description": "public void january() { return; }",
+                      "sequence": 1
+                    },
+                    {
+                      "optionId": "B",
+                      "description": "public int february() { return null;}",
+                      "sequence": 2
+                    },
+                    {
+                      "optionId": "C",
+                      "description": "public void march() {}",
+                      "sequence": 3
+                    },
+                    {
+                      "optionId": "D",
+                      "description": "public int april() { return 9;}",
+                      "sequence": 4
+                    },
+                    {
+                      "optionId": "E",
+                      "description": "public int may() { return 9.0;}",
+                      "sequence": 5
+                    },
+                    {
+                      "optionId": "F",
+                      "description": "public int june() { return;}",
+                      "sequence": 6
+                    }
+                  ],
+                  "answers" :["A","B"]
+                                
+                }]
+                """;
+
+        mockMvc.perform(post("/v1/questions")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(questions))
+                .andExpect(status()
+                        .isAccepted())
+                .andReturn();
+
+        verify(questionService).saveQuestions(argumentCaptor.capture());
+
+        assertEquals(1, argumentCaptor.getValue().size());
+        assertEquals("Which of the following methods compile? (Choose all that apply.)", argumentCaptor.getValue().get(0).question());
+        assertEquals("java 17", argumentCaptor.getValue().get(0).type());
+        assertEquals(Arrays.asList("A", "B"), argumentCaptor.getValue().get(0).answers());
+
+        assertEquals(6, argumentCaptor.getValue().get(0).options().size());
+
+        assertEquals("A", argumentCaptor.getValue().get(0).options().get(0).optionId());
+        assertEquals(1, argumentCaptor.getValue().get(0).options().get(0).sequence());
+    }
+    @Test
+    public void shouldReturnBadRequestWhenQuestionIsNull() throws Exception {
+        String questions = """
+            [
+                {
+                "type": "java 17",
+                
+                  
+                  "options": [
+                    {
+                      "optionId": "A",
+                      "description": "public void january() { return; }",
+                      "sequence": 1
+                    },
+                    {
+                      "optionId": "B",
+                      "description": "public int february() { return null;}",
+                      "sequence": 2
+                    },
+                    {
+                      "optionId": "C",
+                      "description": "public void march() {}",
+                      "sequence": 3
+                    },
+                    {
+                      "optionId": "D",
+                      "description": "public int april() { return 9;}",
+                      "sequence": 4
+                    },
+                    {
+                      "optionId": "E",
+                      "description": "public int may() { return 9.0;}",
+                      "sequence": 5
+                    },
+                    {
+                      "optionId": "F",
+                      "description": "public int june() { return;}",
+                      "sequence": 6
+                    }
+                  ],
+                  "answers" :["A","B"]
+                                
+                }]
+            """;
+
+        mockMvc.perform(post("/v1/questions")
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(questions))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        //you are telling to the mock that when above request has bad request
+        // the mock should not call saveQuestions
+        verify(questionService, never()).saveQuestions(anyList());
+
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenQuestionIsEmpty() throws Exception {
+        String questions = """
+            [
+                {
+                "type": "java 17",
+                "question": "",
+                  
+                  "options": [
+                    {
+                      "optionId": "A",
+                      "description": "public void january() { return; }",
+                      "sequence": 1
+                    },
+                    {
+                      "optionId": "B",
+                      "description": "public int february() { return null;}",
+                      "sequence": 2
+                    },
+                    {
+                      "optionId": "C",
+                      "description": "public void march() {}",
+                      "sequence": 3
+                    },
+                    {
+                      "optionId": "D",
+                      "description": "public int april() { return 9;}",
+                      "sequence": 4
+                    },
+                    {
+                      "optionId": "E",
+                      "description": "public int may() { return 9.0;}",
+                      "sequence": 5
+                    },
+                    {
+                      "optionId": "F",
+                      "description": "public int june() { return;}",
+                      "sequence": 6
+                    }
+                  ],
+                  "answers" :["A","B"]
+                                
+                }]
+            """;
+
+        mockMvc.perform(post("/v1/questions")
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(questions))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+
+    }
+
+
+    }
+

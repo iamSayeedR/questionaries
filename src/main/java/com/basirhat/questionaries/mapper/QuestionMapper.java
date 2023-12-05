@@ -2,7 +2,8 @@ package com.basirhat.questionaries.mapper;
 
 
 import com.basirhat.questionaries.entity.QuestionEntity;
-import com.basirhat.questionaries.model.Question;
+
+import com.basirhat.questionnaires.model.Question;
 import org.mapstruct.*;
 
 import java.util.Arrays;
