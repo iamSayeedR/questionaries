@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -68,6 +69,58 @@ class QuestionRepositoryTest {
         assertThat(questionEntity.getQid()).isNotZero();
         assertThat(questionOptionList.size()).isEqualTo(1);
         assertThat(questionEntity.getAnswers()).isNotNull();
+    }
+
+
+    @Test
+    public void shouldTestGetAnswers() {
+        QuestionEntity questionEntity1 = QuestionEntity.builder()
+                .type("Java 17")
+                .question("Which of the following methods compile? (Choose all that apply.)")
+                .questionOptionsList(List.of(QuestionOptionEntity.builder()
+                        .optionId("A")
+                        .description("ssd")
+                        .sequence(1)
+                        .build()))
+                .answers("A")
+                .build();
+
+        QuestionEntity questionEntity2 = QuestionEntity.builder()
+                .type("Java 17")
+                .question("Which of the following methods compile? (Choose all that apply.)")
+                .questionOptionsList(List.of(QuestionOptionEntity.builder()
+                        .optionId("A")
+                        .description("ssd")
+                        .sequence(1)
+                        .build()))
+                .answers("A")
+                .build();
+
+        QuestionEntity questionEntity3 = QuestionEntity.builder()
+                .type("Java 17")
+                .question("Which of the following methods compile? (Choose all that apply.)")
+                .questionOptionsList(List.of(QuestionOptionEntity.builder()
+                        .optionId("A")
+                        .description("ssd")
+                        .sequence(1)
+                        .build()))
+                .answers("A")
+                .build();
+
+        List<QuestionEntity> questionEntities = questionRepository.saveAll(List.of(questionEntity1, questionEntity2, questionEntity3));
+
+        assertThat(questionEntities.size()).isEqualTo(3); //3 records inserted.
+
+        List<Integer> questionIdList = questionEntities.stream().map(QuestionEntity::getQid).toList();
+        List<QuestionEntity> allById = questionRepository.findAllById(questionIdList);
+
+
+        assertThat(allById.size()).isEqualTo(3);
+
+
+
+
+
     }
 
 

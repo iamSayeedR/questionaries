@@ -1,0 +1,25 @@
+{
+  "questionAnswers": [
+    {
+      "questionId": 1,
+      "answer": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "questionId": 2,
+      "answer": [
+        "E",
+        "F"
+      ]
+    },
+    {
+      "questionId": 3,
+      "answer": [
+        "C",
+        "D"
+      ]
+    }
+  ]
+}

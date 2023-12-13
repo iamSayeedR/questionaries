@@ -7,6 +7,8 @@ import com.basirhat.questionaries.mapper.QuestionOptionMapper;
 
 import com.basirhat.questionaries.repository.QuestionRepository;
 import com.basirhat.questionnaires.model.Question;
+import com.basirhat.questionnaires.model.QuestionAnswer;
+import com.basirhat.questionnaires.model.QuestionAnswerResponse;
 import com.basirhat.questionnaires.model.QuestionOption;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,9 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,6 +41,8 @@ class QuestionServiceTest {
 
     @Captor
     private ArgumentCaptor<List<QuestionEntity>> argumentCaptorQuestionEntity;
+    @Captor
+    private ArgumentCaptor<List<Integer>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
     @Test
     public void shouldTestSaveAllTheQuestions() {
@@ -95,6 +97,65 @@ class QuestionServiceTest {
 
 
     }
+
+    @Test
+    public void shouldTestReturnAllId() {
+
+        List<Integer> qid = Arrays.asList(1,2,3);
+
+       questionService.getQuestionAnswer(qid);
+       verify(questionRepository).findAllById(argumentCaptor.capture());
+
+       List<Integer> capturedIds =argumentCaptor.getValue();
+       assertEquals(qid,capturedIds);
+    }
+    @Test
+    public void shouldReturnEmptyResponseForEmptyQuestionIds() {
+        List<Integer> qid = List.of();
+        questionService.getQuestionAnswer(qid);
+        verify(questionRepository).findAllById(argumentCaptor.capture());
+        List<Integer> capturedIds = argumentCaptor.getValue();
+        assertEquals(qid,capturedIds);
+    }
+    @Test
+    public void shouldGetAnswersForValidQuestionsIds() {
+
+        List<Integer> questionIdList = List.of(1,2,3);
+
+        List<QuestionEntity> questionEntities = new ArrayList<>();
+        questionEntities.add(QuestionEntity.builder().qid(1).answers("A,B,C").build());
+        questionEntities.add(QuestionEntity.builder().qid(2).answers("D").build());
+        questionEntities.add(QuestionEntity.builder().qid(3).answers("E,F").build());
+
+        when(questionRepository.findAllById(questionIdList)).thenReturn(questionEntities);
+
+
+        QuestionAnswerResponse actualResponse = questionService.getQuestionAnswer(questionIdList);
+
+        List<QuestionAnswer> expectedAnswers = new ArrayList<>();
+        expectedAnswers.add(QuestionAnswer.builder().questionId(1).answer(List.of("A","B","C")).build());
+        expectedAnswers.add(QuestionAnswer.builder().questionId(2).answer(List.of("D")).build());
+        expectedAnswers.add(QuestionAnswer.builder().questionId(3).answer(List.of("E","F")).build());
+        QuestionAnswerResponse expectedResponse = QuestionAnswerResponse.builder().questionAnswers(expectedAnswers).build();
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(questionRepository).findAllById(questionIdList);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Test
     void shouldTestGetRandomQuestions() {

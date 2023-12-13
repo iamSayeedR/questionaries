@@ -34,4 +34,6 @@ public class QuestionEntity {
 
     @Column(name = "answers")
     private String answers;
+
+
 }

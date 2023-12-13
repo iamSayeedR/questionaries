@@ -1,8 +1,11 @@
 package com.basirhat.questionaries.controller;
 
 
+import com.basirhat.questionaries.entity.QuestionEntity;
 import com.basirhat.questionaries.service.QuestionService;
 import com.basirhat.questionnaires.model.Question;
+import com.basirhat.questionnaires.model.QuestionAnswer;
+import com.basirhat.questionnaires.model.QuestionAnswerResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +44,15 @@ public class QuestionController {
         return ResponseEntity.ok(questions);
 
     }
+    @GetMapping("/question/answer")
+    public ResponseEntity<QuestionAnswerResponse> getQuestionAnswers(@RequestBody List<Integer> questionIdList) {
+
+        QuestionAnswerResponse questionAnswerResponse = questionService.getQuestionAnswer(questionIdList);
+
+        return ResponseEntity.ok(questionAnswerResponse);
+
+    }
+
 
 
 

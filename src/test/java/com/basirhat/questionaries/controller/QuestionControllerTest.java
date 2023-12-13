@@ -3,6 +3,8 @@ package com.basirhat.questionaries.controller;
 
 import com.basirhat.questionaries.service.QuestionService;
 import com.basirhat.questionnaires.model.Question;
+import com.basirhat.questionnaires.model.QuestionAnswer;
+import com.basirhat.questionnaires.model.QuestionAnswerResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,7 +17,6 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -534,59 +535,41 @@ class QuestionControllerTest {
 
     }
 
+//
+
+
     @Test
-    void shouldReturnBadRequestWhenQuestionIsEmpty() throws Exception {
-        String questions = """
-            [
-                {
-                "type": "java 17",
-                "question": "",
-                  
-                  "options": [
-                    {
-                      "optionId": "A",
-                      "description": "public void january() { return; }",
-                      "sequence": 1
-                    },
-                    {
-                      "optionId": "B",
-                      "description": "public int february() { return null;}",
-                      "sequence": 2
-                    },
-                    {
-                      "optionId": "C",
-                      "description": "public void march() {}",
-                      "sequence": 3
-                    },
-                    {
-                      "optionId": "D",
-                      "description": "public int april() { return 9;}",
-                      "sequence": 4
-                    },
-                    {
-                      "optionId": "E",
-                      "description": "public int may() { return 9.0;}",
-                      "sequence": 5
-                    },
-                    {
-                      "optionId": "F",
-                      "description": "public int june() { return;}",
-                      "sequence": 6
-                    }
-                  ],
-                  "answers" :["A","B"]
-                                
-                }]
-            """;
+    void shouldReturnQuestionAnswerResponseForTheGivenQuestIds() throws Exception {
+        String questionIds = """
+                  [1,2,3]
+                """;
+        QuestionAnswerResponse questionAnswerResponse = QuestionAnswerResponse.builder()
+                .questionAnswers(List.of(QuestionAnswer.builder()
+                        .questionId(1)
+                        .answer(List.of("A")).build())).build();
 
-        mockMvc.perform(post("/v1/questions")
-                .contentType(APPLICATION_JSON_VALUE)
-                .content(questions))
-                .andExpect(status().isBadRequest())
-                .andReturn();
+        when(questionService.getQuestionAnswer(List.of(1, 2, 3)))
+                .thenReturn(questionAnswerResponse);
+
+        String payload = mockMvc.perform(
+                        get("/v1/question/answer")
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(questionIds))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
 
+        QuestionAnswerResponse actual = objectMapper.readValue(payload, QuestionAnswerResponse.class);
+
+        assertEquals(questionAnswerResponse, actual);
     }
+
+
+
+
+
 
 
     }

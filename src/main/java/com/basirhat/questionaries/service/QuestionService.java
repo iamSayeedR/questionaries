@@ -6,6 +6,8 @@ import com.basirhat.questionaries.mapper.QuestionMapper;
 import com.basirhat.questionaries.mapper.QuestionOptionMapper;
 import com.basirhat.questionaries.repository.QuestionRepository;
 import com.basirhat.questionnaires.model.Question;
+import com.basirhat.questionnaires.model.QuestionAnswer;
+import com.basirhat.questionnaires.model.QuestionAnswerResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -72,6 +75,32 @@ public class QuestionService {
         return questionMapper.entitiesToDomain(randomQuestionEntities);
     }
 
+    public QuestionAnswerResponse getQuestionAnswer(List<Integer> questionIdList) {
+
+        log.info("getting answers for question IDs: {}", questionIdList);
+
+
+        final List<QuestionAnswer> answers = new ArrayList<>();
+
+        List<QuestionEntity> questionEntities = questionRepository.findAllById(questionIdList);
+
+        for (QuestionEntity questionEntity : questionEntities) {
+            int qid = questionEntity.getQid();
+            String answers1 = questionEntity.getAnswers();
+            List<String> list = Arrays.stream(answers1.split(",")).toList(); //convert string into list
+
+            QuestionAnswer questionAnswer = QuestionAnswer.builder().questionId(qid).answer(list).build();
+
+            answers.add(questionAnswer);
+        }
+
+        QuestionAnswerResponse questionAnswerResponse = QuestionAnswerResponse.builder().questionAnswers(answers).build();
+
+
+        log.info("retrieved answers for question IDs: {}", questionIdList);
+
+        return questionAnswerResponse;
+    }
 
     /**
      * Generates random numbers
@@ -90,4 +119,6 @@ public class QuestionService {
         log.info("random numberList generated");
         return numberList;
     }
+
+
 }
